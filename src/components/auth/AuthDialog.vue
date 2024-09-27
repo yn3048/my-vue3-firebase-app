@@ -58,8 +58,8 @@ const changeViewMode = mode => (viewMode.value = mode);
 const authViewComponents = {
   SignInForm: defineAsyncComponent(() => import('./SignInForm.vue')),
   SignUpForm: defineAsyncComponent(() => import('./SignUpForm.vue')),
-  FindPasswordForm: defineAsyncComponent(() =>
-    import('./FindPasswordForm.vue'),
+  FindPasswordForm: defineAsyncComponent(
+    () => import('./FindPasswordForm.vue'),
   ),
 };
 

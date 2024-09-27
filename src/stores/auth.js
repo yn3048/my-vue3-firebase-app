@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     serializer: StorageSerializers.object,
   });
   const isAuthenticated = computed(() => !!user.value);
+  const uid = computed(() => user.value?.uid || null);
 
   const setUser = userData => {
     user.value = userData;
@@ -25,9 +26,19 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const hasOwnContent = contentUid => {
+    // 로그인 안 된 상태일 경우
+    if (!isAuthenticated.value) {
+      return false;
+    }
+    return uid.value === contentUid;
+  };
+
   return {
     user,
+    uid,
     isAuthenticated,
     setUser,
+    hasOwnContent,
   };
 });

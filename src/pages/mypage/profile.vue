@@ -62,6 +62,7 @@ const { isLoading: isLoadingProfile, execute: executeProfile } = useAsyncState(
       $q.notify('프로필 수정 완료!');
     },
     onError: err => {
+      console.log(err.message);
       $q.notify({
         type: 'negative',
         message: getErrorMessage(err.code),

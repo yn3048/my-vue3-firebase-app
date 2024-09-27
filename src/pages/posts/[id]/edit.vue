@@ -9,10 +9,18 @@
         v-model:title="form.title"
         v-model:category="form.category"
         v-model:content="form.content"
+        v-model:tags="form.tags"
+        @submit="handleSubmit"
       >
         <template #actions>
           <q-btn flat label="취소" />
-          <q-btn type="submit" flat label="수정" color="primary" />
+          <q-btn
+            type="submit"
+            flat
+            label="수정"
+            color="primary"
+            :loading="isLoading"
+          />
         </template>
       </PostForm>
     </BaseCard>
@@ -34,10 +42,49 @@ const getInitialForm = () => ({
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useQuasar } from 'quasar';
+import { getPost, updatePost } from 'src/services';
+import { useAsyncState } from '@vueuse/core';
 import BaseCard from 'src/components/base/BaseCard.vue';
 import PostForm from 'src/components/apps/post/PostForm.vue';
 
+const route = useRoute();
+const $q = useQuasar();
 const form = ref(getInitialForm());
+
+useAsyncState(
+  () => getPost(route.params.id),
+  {},
+  {
+    onSuccess: post => {
+      form.value.title = post.title;
+      form.value.category = post.category;
+      form.value.content = post.content;
+      form.value.tags = post.tags;
+    },
+  },
+);
+
+const { isLoading, execute: executeUpdatePost } = useAsyncState(
+  updatePost,
+  null,
+  {
+    immediate: false,
+    throwError: true,
+    onSuccess: () => {
+      $q.notify('수정완료!');
+    },
+  },
+);
+
+const handleSubmit = async () => {
+  if (confirm('수정 하시겠습니까?') === false) {
+    return;
+  }
+  // await 없을 경우 global error에서 캐치 할 수 없음
+  await executeUpdatePost(1000, route.params.id, form.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

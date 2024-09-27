@@ -70,6 +70,7 @@ const $q = useQuasar();
 
 const { isLoading, error, execute } = useAsyncState(signInWithEmail, null, {
   immediate: false,
+  // throwError: true,
   onSuccess: () => {
     $q.notify('환영합니다😊');
     emit('closeDialog');
