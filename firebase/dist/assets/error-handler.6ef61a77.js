@@ -1,0 +1,1 @@
+import{b as n,N as l}from"./index.b6e7ed26.js";import{g as s}from"./error-message.dd71d088.js";var t=n(async({app:r})=>{r.config.errorHandler=(o,e,a)=>{console.log("### app.config.errorHandler  ###"),console.log("err: ",o),console.log("instance: ",e),console.log("info: ",a),l.create(s(o.code))}});export{t as default};
